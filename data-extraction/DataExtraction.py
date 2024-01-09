@@ -54,16 +54,25 @@ for ticker in query:
             }
 
             # Check if the post is a megathread
-            if 'megathread' in post.title.lower():
+            if 'thread' in post.title.lower():
+                total_post_comment_count = 0
+                relevant_post_comment_count = 0
                 post.comments.replace_more(limit=0)  # Expand all comments
                 comments_data = []
                 for comment in post.comments.list():
+                    total_post_comment_count += 1
+                    if comment.body == '[removed]' or comment.body == '[deleted]' or comment.body == '':
+                        continue
                     # Extract relevant data from each comment
+                    relevant_post_comment_count += 1
                     comments_data.append({
                         "body": comment.body,
                         "upvotes": comment.score,
                         "created_utc": int(comment.created_utc)
                     })
+
+                print(f"Total comments found on post: {total_post_comment_count}")
+                print(f"Total relevant comments found on post: {relevant_post_comment_count}")
 
                 # Add comments data to the post data
                 post_data["comments"] = comments_data

@@ -18,7 +18,7 @@ print(f"Authenticated as: {reddit.user.me()}")
 subreddit = reddit.subreddit("wallstreetbets")
 
 # Define your query and time period (example dates)
-query = ['GME', 'AMC']
+query = ['GME', 'AMC', 'GameStop', 'AMC Entertainment']
 start_date = int(datetime(2021, 1, 1).timestamp())
 end_date = int(datetime(2021, 4, 30).timestamp())
 
@@ -29,6 +29,7 @@ posts_data = []
 post_counter = 0
 for ticker in query:
     for post in subreddit.search(ticker, limit=1000):  # Adjust limit as needed
+        post_counter += 1
         created_date = int(post.created_utc)
         if start_date <= created_date <= end_date:
             if post.selftext == '[removed]' or post.selftext == '[deleted]' or post.selftext == '':
@@ -43,7 +44,6 @@ for ticker in query:
                     "created_utc": created_date
                 })
                 print(f"Post found, dated: {datetime.fromtimestamp(created_date)}")
-                post_counter += 1
 
 print(f"Total posts found: {post_counter}")
 

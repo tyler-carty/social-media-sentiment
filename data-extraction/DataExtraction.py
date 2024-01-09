@@ -54,7 +54,7 @@ for ticker in query:
             }
 
             # Check if the post is a megathread
-            if 'thread' in post.title.lower():
+            if 'megathread' in post.title.lower():
                 total_post_comment_count = 0
                 relevant_post_comment_count = 0
                 post.comments.replace_more(limit=0)  # Expand all comments

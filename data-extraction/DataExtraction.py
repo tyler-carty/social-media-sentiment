@@ -86,9 +86,8 @@ print(f"Total relevant posts found: {relevant_post_counter}")
 
 # Save data to a JSON file
 script_dir = os.path.dirname(os.path.abspath(__file__))
-data_dir = os.path.join(script_dir, 'data')
-os.makedirs(data_dir, exist_ok=True)
-json_file_path = os.path.join(data_dir, 'wallstreetbets_posts.json')
+script_dir = os.path.dirname(script_dir)
+json_file_path = os.path.join(script_dir, 'wallstreetbets_posts.json')
 
 with open(json_file_path, 'w') as json_file:
     json.dump(posts_data, json_file, indent=4)

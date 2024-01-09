@@ -40,19 +40,40 @@ for ticker in query:
         if start_date <= created_date <= end_date:
             if post.selftext == '[removed]' or post.selftext == '[deleted]' or post.selftext == '':
                 continue
-            else:
-                relevant_post_counter += 1
-                posts_data.append({
-                    "title": post.title,
-                    "text": post.selftext,
-                    "upvotes": post.score,
-                    "num_comments": post.num_comments,
-                    "post_url": post.url,
-                    "created_utc": created_date
-                })
+
+            relevant_post_counter += 1
+
+            post_data = {
+                "title": post.title,
+                "text": post.selftext,
+                "upvotes": post.score,
+                "num_comments": post.num_comments,
+                "post_url": post.url,
+                "created_utc": created_date,
+                "post_id": post.id  # Store post ID for later use
+            }
+
+            # Check if the post is a megathread
+            if 'megathread' in post.title.lower():
+                post.comments.replace_more(limit=0)  # Expand all comments
+                comments_data = []
+                for comment in post.comments.list():
+                    # Extract relevant data from each comment
+                    comments_data.append({
+                        "body": comment.body,
+                        "upvotes": comment.score,
+                        "created_utc": int(comment.created_utc)
+                    })
+
+                # Add comments data to the post data
+                post_data["comments"] = comments_data
+
+            # Add post data to the list
+            posts_data.append(post_data)
 
 print(f"Total posts found: {total_post_counter}")
 print(f"Total relevant posts found: {relevant_post_counter}")
+
 
 # Save data to a JSON file
 script_dir = os.path.dirname(os.path.abspath(__file__))

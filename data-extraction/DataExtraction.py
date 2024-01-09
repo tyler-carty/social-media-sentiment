@@ -17,24 +17,31 @@ print(f"Authenticated as: {reddit.user.me()}")
 
 subreddit = reddit.subreddit("wallstreetbets")
 
+print(f"Searching Subreddit: {subreddit.display_name}")
+
 # Define your query and time period (example dates)
 query = ['GME', 'AMC', 'GameStop', 'AMC Entertainment']
+print(f"Search query tags: {query}")
+
 start_date = int(datetime(2021, 1, 1).timestamp())
-end_date = int(datetime(2021, 4, 30).timestamp())
+end_date = int(datetime(2021, 2, 28).timestamp())
+print(f"Search date range: {datetime.fromtimestamp(start_date)} to {datetime.fromtimestamp(end_date)}")
 
 # Store posts data
 posts_data = []
 
 # Fetch and filter posts
-post_counter = 0
+total_post_counter = 0
+relevant_post_counter = 0
 for ticker in query:
     for post in subreddit.search(ticker, limit=1000):  # Adjust limit as needed
-        post_counter += 1
+        total_post_counter += 1
         created_date = int(post.created_utc)
         if start_date <= created_date <= end_date:
             if post.selftext == '[removed]' or post.selftext == '[deleted]' or post.selftext == '':
-                print(f"Post body not valid text, dated: {datetime.fromtimestamp(created_date)}")
+                continue
             else:
+                relevant_post_counter += 1
                 posts_data.append({
                     "title": post.title,
                     "text": post.selftext,
@@ -43,9 +50,9 @@ for ticker in query:
                     "post_url": post.url,
                     "created_utc": created_date
                 })
-                print(f"Post found, dated: {datetime.fromtimestamp(created_date)}")
 
-print(f"Total posts found: {post_counter}")
+print(f"Total posts found: {total_post_counter}")
+print(f"Total relevant posts found: {relevant_post_counter}")
 
 # Save data to a JSON file
 script_dir = os.path.dirname(os.path.abspath(__file__))

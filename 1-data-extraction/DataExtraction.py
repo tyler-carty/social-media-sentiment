@@ -1,4 +1,5 @@
-# A script to retreive data of posts from Reddit's WallStreetBets subreddit regarding AMC and GME stocks around the time of the short squeeze.
+# A script to retrieve data of posts from Reddit's WallStreetBets subreddit regarding AMC and GME stocks around the time
+# of the short squeeze.
 
 import os
 import praw

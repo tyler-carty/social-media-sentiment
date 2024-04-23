@@ -28,5 +28,5 @@ for post in data:
             comment_text = comment.get('body', '')
             comment['sentiment'] = sia.polarity_scores(comment_text)['compound']
 
-with open(json_file_path, 'w') as json_file:
+with open('wallstreetbets_posts_VADER.json', 'w') as json_file:
     json.dump(data, json_file, indent=4)
